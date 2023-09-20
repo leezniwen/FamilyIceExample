@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <None Remove="Swashbuckle.AspNetCore.Swagger" />
+    <None Remove="Swashbuckle.AspNetCore.SwaggerGen" />
+    <None Remove="Swashbuckle.AspNetCore.SwaggerUI" />
+    <None Remove="Swashbuckle.AspNetCore" />
+    <None Remove="json_file\" />
+    <None Remove="Views\" />
+    <None Remove="Views\Web\" />
+    <None Remove="Contents\" />
+    <None Remove="Views\shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="json_file\" />
+    <Folder Include="Views\" />
+    <Folder Include="Views\Web\" />
+    <Folder Include="Contents\" />
+    <Folder Include="Views\shared\" />
+  </ItemGroup>
+</Project>

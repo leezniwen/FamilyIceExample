@@ -1,0 +1,35 @@
+﻿@model family_icecream.FamilyIce
+@{
+    Layout = "";
+    string[] flavorOption = new string[] {"番茄","小農鮮奶","荔枝烏龍","比利時巧克力","草莓" };
+}
+
+<!Doctype html>
+<html>
+    <head>
+        <title>更新資料</title>
+    </head>
+    <body>
+           <form name="UpdateIce" method="post">
+           <h2>店家資訊</h2>
+           <h3 name="storeName">@Model.storeName</h3>
+           <input type="hidden" name="id" value="@Model.storeName" />
+           <select name="flaver" style="font-size:larger;">
+               @{
+                   for(int i = 0; i < flavorOption.Count(); i++)
+                   {
+                       if(Model.flavor == flavorOption[i])
+                       {
+                           <option value="@flavorOption[i]" selected>@flavorOption[i]</option>
+                       }
+                       else
+                       {
+                           <option value="@flavorOption[i]">@flavorOption[i]</option>
+                       }
+                   }
+               }
+           </select>
+           <input type="submit" value="更新" style="font-size:larger;" />
+           </form>
+    </body>
+</html>
