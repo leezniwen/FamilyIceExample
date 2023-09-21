@@ -91,6 +91,57 @@ namespace family_icecream.Controllers
             return _resultList;
         }
 
+        /*
+        [HttpPost("AddIceFlaverForJson")]
+        public OutResult AddIceFlaverForJson([FromBody] List<FamilyIce> iceText)
+        {
+
+            List<FamilyIce> _resultList = iceText;
+            List<FamilyIce> _InitOrigin = CreateFamilyIceDB();
+            FamilyStoreDB familyObj = CreateFamilyDB();
+            Boolean Ok = Verity_storyName(iceText);
+
+            //如果找到店家就取代，如果沒找到店家就插入新的 (前提是有那家店)
+            if (Ok == false)
+            {
+                OutResult resJson = new OutResult();
+                resJson.StatusCode = "Fail";
+                resJson.MSG = "資料更新錯誤";
+                return resJson;
+            }
+            for (int i = 0; i < _resultList.Count; i++)
+            {
+                bool NewData = true;
+                int index = 0;
+                foreach (var data in _InitOrigin)
+                {
+                    if (data.storeName == _resultList[i].storeName)
+                    {
+                        NewData = false;
+                        _InitOrigin[index].flavor = _resultList[i].flavor;
+                        break;
+                    }
+                    index++;
+                }
+                if (NewData)
+                {
+                    _InitOrigin.Add(_resultList[i]);
+                }
+
+            }
+
+
+
+            string result = JsonSerializer.Serialize(_InitOrigin);
+            System.IO.File.WriteAllText(iceUrl, result);
+
+            OutResult resultJson = new OutResult();
+            resultJson.StatusCode = "OK";
+            resultJson.MSG = _resultList;
+
+            return resultJson;
+        }
+        */
         [HttpGet("GetIceStore")]
         public List<FamilyOutResult> GetIceStore(string keyValue)
         {
