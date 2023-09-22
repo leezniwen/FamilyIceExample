@@ -23,9 +23,21 @@ namespace family_icecream.Contents
 			var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
 			if(response.StatusCode == System.Net.HttpStatusCode.OK)
 			{
-				List<FamilyIce> result = JsonSerializer.Deserialize<List<FamilyIce>>(responseString);
-
-                return result;
+                var option = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                OutResult res = JsonSerializer.Deserialize<OutResult>(responseString , option);
+				if(res.StatusCode == "OK")
+				{
+                    List<FamilyIce> result = JsonSerializer.Deserialize<List<FamilyIce>>(res.MSG.ToString());
+					return result;
+                }
+				else
+				{
+					return null;
+				}
+				
 			}
 			return null;
 		}
@@ -65,12 +77,21 @@ namespace family_icecream.Contents
 			{
 				streamwriter.Write(jsonStr);
 			}
-
-			var response = (HttpWebResponse)request.GetResponse();
-			string result = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
-
-            return result;
+            var option = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+            var response = (HttpWebResponse)request.GetResponse();
+			string JSondata = new StreamReader(response.GetResponseStream()).ReadToEnd();
+			var result = JsonSerializer.Deserialize<OutResult>(JSondata , option);
+			if(result.StatusCode == "OK")
+			{
+				return "OK";
+			}
+			else
+			{
+				return "";
+			}
 		}
 
 	}

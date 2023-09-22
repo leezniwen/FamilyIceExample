@@ -36,6 +36,8 @@ namespace family_icecream.Controllers
 
             return familyObj;
         }
+
+        /*
         [HttpPost("AddIceFlaver")]
         public List<FamilyIce> AddIceFlaver([FromBody] List<FamilyIce> iceText)
         {
@@ -73,7 +75,7 @@ namespace family_icecream.Controllers
             
             
             //純粹寫入...json檔格式範例
-            /*
+            
              [
                 {
                   "Name": Name,
@@ -81,7 +83,7 @@ namespace family_icecream.Controllers
                   "Flaver":Flaver
                 }
              ]
-             */
+             
 
 
             string result = JsonSerializer.Serialize(_InitOrigin);
@@ -90,10 +92,10 @@ namespace family_icecream.Controllers
             
             return _resultList;
         }
-
-        /*
-        [HttpPost("AddIceFlaverForJson")]
-        public OutResult AddIceFlaverForJson([FromBody] List<FamilyIce> iceText)
+        */
+        
+        [HttpPost("AddIceFlaver")]
+        public OutResult AddIceFlaver([FromBody] List<FamilyIce> iceText)
         {
 
             List<FamilyIce> _resultList = iceText;
@@ -106,7 +108,7 @@ namespace family_icecream.Controllers
             {
                 OutResult resJson = new OutResult();
                 resJson.StatusCode = "Fail";
-                resJson.MSG = "資料更新錯誤";
+                resJson.MSG = "資料更新錯誤(不存在的店家)";
                 return resJson;
             }
             for (int i = 0; i < _resultList.Count; i++)
@@ -141,11 +143,12 @@ namespace family_icecream.Controllers
 
             return resultJson;
         }
-        */
+        
         [HttpGet("GetIceStore")]
-        public List<FamilyOutResult> GetIceStore(string keyValue)
+        public OutResult GetIceStore(string keyValue)
         {
-            string result = "";
+            string data = "";
+            OutResult result = new OutResult();
             List<FamilyOutResult> outResult = new List<FamilyOutResult>();
             
             using (StreamReader sr = new StreamReader(iceUrl))
@@ -153,41 +156,51 @@ namespace family_icecream.Controllers
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    result = result + line;
+                    data = data + line;
                 }
             }
-            List<FamilyIce> FamilyObj = JsonSerializer.Deserialize<List<FamilyIce>>(result);
+            List<FamilyIce> FamilyObj = JsonSerializer.Deserialize<List<FamilyIce>>(data);
             for (int i = 0; i < FamilyObj.Count; i++)
             {
+                //找到是否有對應到的實際顯示結果為outResult
                 if (FamilyObj[i].flavor.IndexOf(keyValue) > -1 )
                 {
                     outResult.Add(new FamilyOutResult { storeName = FamilyObj[i].storeName });
                 }
                 
             }
-
+            if (outResult.Count > 0)
+            {
+                result.StatusCode = "OK";
+                result.MSG = outResult;
+            }
+            else
+            {
+                result.StatusCode = "OK";
+                result.MSG = "查無店家有此口味";
+            }
             
-            
-            return outResult;
+            return result;
         }
 
         [HttpGet("GetIceStore/all")]
-        public List<FamilyIce> GetIceStoreAll()
+        public OutResult GetIceStoreAll()
         {
-            string result = "";
-
+            OutResult result = new OutResult();
+            string data = "";
             using (StreamReader sr = new StreamReader(iceUrl))
             {
                 string line;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    result = result + line;
+                    data = data + line;
                 }
             }
-            List<FamilyIce> FamilyObj = JsonSerializer.Deserialize<List<FamilyIce>>(result);
+            List<FamilyIce> FamilyObj = JsonSerializer.Deserialize<List<FamilyIce>>(data);
+            result.StatusCode = "OK";
+            result.MSG = FamilyObj;
 
-
-            return FamilyObj;
+            return result;
         }
 
 
